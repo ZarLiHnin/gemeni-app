@@ -30,7 +30,7 @@ export default function AuthPage() {
         router.push("/"); // ログイン後はトップページへ
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
-        router.push("/whiteboard"); // 新規登録後はホワイトボードへ
+        router.push("/"); // 新規登録後はホワイトボードへ
       }
     } catch (err) {
       if (err instanceof FirebaseError) {

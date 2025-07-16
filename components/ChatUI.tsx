@@ -90,58 +90,6 @@ export default function ChatUI() {
     return "default-session";
   }
 
-  // const sendMessage = async (prompt: string, isRegenerate = false) => {
-  //   if (!prompt.trim()) return;
-
-  //   if (!isRegenerate) {
-  //     const userMessage: ChatMessage = { role: "user", content: prompt };
-  //     addMessage(userMessage);
-  //   } else {
-  //     if (
-  //       messages.length &&
-  //       messages[messages.length - 1].role === "assistant"
-  //     ) {
-  //       resetMessages(messages.slice(0, -1));
-  //     }
-  //   }
-
-  //   setIsStreaming(true);
-  //   setErrorMessage(null);
-
-  //   try {
-  //     const res = await fetch("/api/chat", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         prompt,
-  //         history: isRegenerate ? messages.slice(0, -1) : messages,
-  //         systemPrompt,
-  //       }),
-  //     });
-
-  //     if (!res.body) throw new Error("レスポンスボディがありません");
-
-  //     addMessage({ role: "assistant", content: "" });
-
-  //     const reader = res.body.getReader();
-  //     const decoder = new TextDecoder();
-  //     let done = false;
-
-  //     while (!done) {
-  //       const { value, done: doneReading } = await reader.read();
-  //       done = doneReading;
-  //       const chunk = decoder.decode(value);
-  //       updateLastAssistantMessage(chunk);
-  //     }
-  //   } catch (err) {
-  //     console.error("ストリーミングエラー:", err);
-  //     setErrorMessage("通信エラーが発生しました。もう一度お試しください。");
-  //     updateLastAssistantMessage("（エラーが発生しました）");
-  //   } finally {
-  //     setIsStreaming(false);
-  //   }
-  // };
-
   const sendMessage = async (prompt: string, isRegenerate = false) => {
     if (!prompt.trim()) return;
 
@@ -387,6 +335,7 @@ export default function ChatUI() {
               if (e.key === "Enter" && !e.shiftKey && !isComposingRef.current) {
                 e.preventDefault();
                 sendMessage(input);
+                setInput(""); // ← これを追加！
               }
             }}
             onCompositionStart={() => {
