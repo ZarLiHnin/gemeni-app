@@ -22,7 +22,7 @@ type CodeComponentProps = {
 };
 
 export default function ChatUI() {
-  const hasHydrated = useStickyStore((s) => s.hasHydrated);
+  const hasHydrated = true;
   const isComposingRef = useRef(false);
 
   const [input, setInput] = useState("");
