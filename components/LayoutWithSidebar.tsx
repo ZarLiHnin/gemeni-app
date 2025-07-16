@@ -2,7 +2,7 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
-import { Menu, X, LogOut, Plus, Clipboard } from "lucide-react";
+import { Menu, X, LogOut, Plus, Clipboard, Apple } from "lucide-react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
@@ -143,6 +143,16 @@ export default function LayoutWithSidebar({
               <div className="mt-6 border-t pt-4 text-sm text-gray-700 space-y-2">
                 <button
                   onClick={() => {
+                    router.push("/image-search");
+                    setIsSidebarOpen(false);
+                  }}
+                  className="flex items-center gap-2 text-blue-600 hover:underline"
+                >
+                  <Apple size={16} />
+                  画像検索
+                </button>
+                <button
+                  onClick={() => {
                     router.push("/whiteboard");
                     setIsSidebarOpen(false);
                   }}
@@ -198,6 +208,16 @@ export default function LayoutWithSidebar({
           <h1 className="text-lg font-bold">{title}</h1>
 
           <div className="flex items-center gap-4">
+            <button
+              onClick={() => {
+                router.push("/image-search");
+                setIsSidebarOpen(false);
+              }}
+              className="flex items-center gap-2 text-blue-600 hover:underline"
+            >
+              <Apple size={16} />
+              画像検索
+            </button>
             <button
               onClick={() => router.push("/whiteboard")}
               className="flex items-center gap-1 text-sm text-blue-600 hover:underline"

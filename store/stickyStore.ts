@@ -59,12 +59,14 @@ export const useStickyStore = create<StickyStore>()(
     }),
     {
       name: "sticky-store",
-      onRehydrateStorage() {
-        return (state) => {
-          if (state) {
-            useStickyStore.getState().setHasHydrated(true);
-            console.log("Sticky store hydrated.");
+      onRehydrateStorage: () => {
+        return (state, error) => {
+          if (error) {
+            console.warn("❌ StickyStore rehydration failed:", error);
+          } else {
+            console.log("✅ StickyStore rehydrated.");
           }
+          useStickyStore.getState().setHasHydrated(true);
         };
       },
     }
