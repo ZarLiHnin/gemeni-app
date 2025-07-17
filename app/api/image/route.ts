@@ -15,7 +15,6 @@ export async function POST(req: NextRequest) {
     });
 
     const data = await res.json();
-    console.log("DeepAI Response:", data);
 
     if (data.output_url) {
       return NextResponse.json({ imageUrl: data.output_url });

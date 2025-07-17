@@ -2,7 +2,7 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
-import { Menu, X, LogOut, Plus, Clipboard, Apple } from "lucide-react";
+import { Menu, X, LogOut, Plus, Clipboard, LogIn } from "lucide-react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
@@ -36,8 +36,6 @@ export default function LayoutWithSidebar({
     const unsub = onAuthStateChanged(auth, (currentUser) => {
       // ユーザーがログアウトした、または認証状態が変更されたことを検出
       if (user && !currentUser) {
-        // ユーザーがログアウトした場合
-        console.log("User logged out. Clearing state.");
         // ここでZustandストアとLocalStorageの状態をクリア
         localStorage.removeItem("lastSessionId"); // LocalStorageから前回のセッションIDをクリア
         resetChatMessages([]); // chatStoreのメッセージをクリア
@@ -141,7 +139,7 @@ export default function LayoutWithSidebar({
               <SessionSidebar />
 
               <div className="mt-6 border-t pt-4 text-sm text-gray-700 space-y-2">
-                <button
+                {/* <button
                   onClick={() => {
                     router.push("/image-search");
                     setIsSidebarOpen(false);
@@ -150,39 +148,47 @@ export default function LayoutWithSidebar({
                 >
                   <Apple size={16} />
                   画像検索
-                </button>
+                </button> */}
                 <button
                   onClick={() => {
                     router.push("/whiteboard");
                     setIsSidebarOpen(false);
                   }}
-                  className="flex items-center gap-2 text-blue-600 hover:underline"
+                  className="flex items-center gap-2 text-yellow-600 hover:underline"
                 >
                   <Clipboard size={16} />
                   ホワイトボード
                 </button>
 
                 {user ? (
-                  <>
-                    <div className="text-gray-800 font-medium">
-                      {user.displayName || user.email}
-                    </div>
+                  user.isAnonymous ? (
                     <button
-                      onClick={handleLogout}
-                      className="flex items-center gap-2 text-gray-600 hover:underline"
+                      onClick={() => router.push("/auth")}
+                      className="flex items-center gap-2 text-blue-600 hover:underline"
                     >
-                      <LogOut size={16} />
-                      ログアウト
+                      <LogIn size={16} />
+                      ログイン
                     </button>
-                  </>
+                  ) : (
+                    <>
+                      <span className="text-sm text-gray-700">
+                        {user.displayName || user.email}
+                      </span>
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-1 text-sm text-gray-600 hover:underline"
+                      >
+                        <LogOut size={16} />
+                        ログアウト
+                      </button>
+                    </>
+                  )
                 ) : (
                   <button
-                    onClick={() => {
-                      router.push("/auth");
-                      setIsSidebarOpen(false);
-                    }}
-                    className="text-blue-600 hover:underline"
+                    onClick={() => router.push("/auth")}
+                    className="text-sm text-blue-600 hover:underline"
                   >
+                    <LogIn size={16} />
                     ログイン
                   </button>
                 )}
@@ -208,7 +214,7 @@ export default function LayoutWithSidebar({
           <h1 className="text-lg font-bold">{title}</h1>
 
           <div className="flex items-center gap-4">
-            <button
+            {/* <button
               onClick={() => {
                 router.push("/image-search");
                 setIsSidebarOpen(false);
@@ -217,33 +223,44 @@ export default function LayoutWithSidebar({
             >
               <Apple size={16} />
               画像検索
-            </button>
+            </button> */}
             <button
               onClick={() => router.push("/whiteboard")}
-              className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
+              className="flex items-center gap-1 text-sm text-yellow-600 hover:underline"
             >
               <Clipboard size={16} />
               ホワイトボード
             </button>
 
             {user ? (
-              <>
-                <span className="text-sm text-gray-700">
-                  {user.displayName || user.email}
-                </span>
+              user.isAnonymous ? (
                 <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-1 text-sm text-gray-600 hover:underline"
+                  onClick={() => router.push("/auth")}
+                  className="flex items-center gap-2 text-blue-600 hover:underline"
                 >
-                  <LogOut size={16} />
-                  ログアウト
+                  <LogIn size={16} />
+                  ログイン
                 </button>
-              </>
+              ) : (
+                <>
+                  <span className="text-sm text-gray-700">
+                    {user.displayName || user.email}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-1 text-sm text-gray-600 hover:underline"
+                  >
+                    <LogOut size={16} />
+                    ログアウト
+                  </button>
+                </>
+              )
             ) : (
               <button
                 onClick={() => router.push("/auth")}
                 className="text-sm text-blue-600 hover:underline"
               >
+                <LogIn size={16} />
                 ログイン
               </button>
             )}
